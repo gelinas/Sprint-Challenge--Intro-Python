@@ -84,11 +84,43 @@ for c in cities:
 # TODO Get latitude and longitude values from the user
 
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
-  # within will hold the cities that fall within the specified region
-  within = []
+    # within will hold the cities that fall within the specified region
+    within = []
 
-  # TODO Ensure that the lat and lon valuse are all floats
-  # Go through each city and check to see if it falls within 
-  # the specified coordinates.
+    # TODO Ensure that the lat and lon valuse are all floats
+    # Go through each city and check to see if it falls within 
+    # the specified coordinates.
 
-  return within
+    if lat1 == lat2 or lon1 == lon2:
+        print ("you must enter different latitudes and longitudes")
+
+    if lat1 > lat2:
+        left = lat2
+        right = lat1
+    elif lat2 > lat1:
+        left = lat1
+        right = lat2
+
+    if lon1 > lon2:
+        top = lon1
+        bottom = lon2
+    elif lon2 > lon1:
+        top = lon2
+        bottom = lon1
+
+    print(f"{top}, {bottom}, {left}, {right}")
+
+    with open("src/cityreader/cities.csv", newline='') as citiesfile:
+        reader = csv.reader(citiesfile)
+        i = 0
+        for row in reader:
+            if i == 0:
+                i += 1
+            elif i > 0:
+                lat = float(row[3])
+                lon = float(row[4])
+                if left < lat < right and bottom < lon < top:
+                    city = City(row[0], lat, lon)
+                    within.append(city)
+                    print(city)
+    return within
